@@ -2,27 +2,62 @@
 
 ## Italiano
 
-Il gioco Snake in C++, con grafica tramite SFML e una classifica dei punteggi persistente su file.
+Il gioco Snake in C++, con grafica tramite SFML e una classifica dei punteggi persistente su file. Progetto personale sviluppato nel 2021.
 
-**Stack:** C++ · SFML (Graphics) · Windows / Dev-C++ (MinGW)
+**Stack:** C++ · SFML 2.x (Graphics/Window/System)
 
 ### Descrizione
 
 Implementazione del gioco Snake in C++ con la libreria SFML per la grafica 2D, su una griglia 20×20. Include un menu iniziale, la logica di movimento del serpente, la generazione casuale del cibo, il rilevamento delle collisioni (con i bordi e con il proprio corpo) e una classifica persistente: i punteggi vengono salvati su file e, a fine partita, vengono mostrati i primi tre in ordine decrescente.
 
+### Struttura del progetto
+
+```
+Snake-Cpp/
+├── src/
+│   └── main.cpp           # Logica di gioco, rendering e gestione degli eventi
+├── assets/
+│   ├── fonts/
+│   │   └── arial.ttf      # Font utilizzato per i testi
+│   └── images/
+│       ├── snake.png      # Spritesheet del serpente
+│       ├── frutta.png     # Sprite del cibo
+│       └── campo.png      # Sfondo del campo
+├── data/
+│   └── punteggio.txt      # Classifica dei punteggi (persistente, generata/aggiornata a runtime)
+├── dist/                  # Eseguibile Windows precompilato "pronto all'uso" + DLL richieste
+│   ├── Snake.exe
+│   ├── *.dll
+│   ├── image/             # Copia degli asset nel formato atteso dal binario precompilato
+│   └── file/
+├── Makefile
+├── LICENSE
+└── README.md
+```
+
 ### Come si esegue
 
-Il repository include già un eseguibile Windows precompilato (`Snake.exe`) con le relative DLL di SFML, pronto all'uso su Windows: è sufficiente lanciarlo dalla cartella del progetto (le risorse vengono caricate con percorsi relativi: `image/`, `file/`).
+**Eseguibile Windows precompilato:** nella cartella `dist/` trovi `Snake.exe` già pronto, insieme alle DLL richieste e a una copia degli asset necessari. Basta lanciarlo direttamente da dentro `dist/` (il binario si aspetta le sottocartelle `image/` e `file/` accanto a sé, così come erano organizzate quando è stato compilato).
 
-Per ricompilare da sorgente:
-1. Installa SFML 2.x (es. tramite vcpkg o il pacchetto di sviluppo della propria distribuzione).
-2. Compila:
+**Ricompilare da sorgente (consigliato, multipiattaforma):**
+1. Installa SFML 2.x, ad esempio:
+   - Debian/Ubuntu: `sudo apt install libsfml-dev`
+   - Altri sistemi: vedi [sfml-dev.org](https://www.sfml-dev.org/download.php) o usa vcpkg
+2. Dalla **root del progetto**:
    ```
-   g++ main.cpp -o Snake -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+   make
    ```
-3. Esegui dalla cartella del progetto, in modo che i percorsi relativi alle risorse (`image/`, `file/`) siano validi.
+   Questo compila `src/main.cpp` e genera l'eseguibile in `build/Snake`.
+3. Esegui **sempre dalla root del progetto**, così i percorsi relativi verso `assets/` e `data/` restano validi:
+   ```
+   make run
+   ```
+   oppure, equivalentemente:
+   ```
+   ./build/Snake
+   ```
 
-Il file `Makefile.win` incluso è stato generato da Dev-C++ e contiene percorsi assoluti specifici della macchina originale di sviluppo (SFML 2.4.2): non è direttamente riutilizzabile su un'altra macchina, ma la compilazione manuale con `g++` funziona.
+Il vecchio `Makefile.win` (generato da Dev-C++, con percorsi assoluti della macchina di sviluppo originale) è stato rimosso e sostituito da un `Makefile` cross-platform basato su `g++`, senza percorsi hardcoded.
 
 ### Funzionalità principali
 
@@ -31,25 +66,8 @@ Il file `Makefile.win` incluso è stato generato da Dev-C++ e contiene percorsi 
 - Generazione casuale del cibo in una cella libera, verificando che non si sovrapponga al corpo del serpente
 - Rilevamento delle collisioni con i bordi del campo o con il proprio corpo, che termina la partita
 - Punteggio incrementale (+100 per ogni cibo mangiato)
-- Classifica persistente: il punteggio di ogni partita viene salvato su file (`file/punteggio.txt`) e, a fine partita, vengono mostrati i tre punteggi più alti registrati
+- Classifica persistente: il punteggio di ogni partita viene salvato su file (`data/punteggio.txt`) e, a fine partita, vengono mostrati i tre punteggi più alti registrati
 - Interfaccia grafica 2D con sprite, texture e font renderizzati tramite SFML
-
-### Struttura del progetto
-
-```
-Snake-Cpp/
-├── main.cpp                 # Logica di gioco, rendering e gestione degli eventi
-├── Makefile.win              # Makefile generato da Dev-C++ (percorsi specifici della macchina originale)
-├── image/                    # Sprite del serpente, del cibo e sfondo del campo
-├── file/
-│   ├── arial.TTF              # Font utilizzato per i testi
-│   └── punteggio.txt          # Classifica dei punteggi (persistente)
-└── Snake.exe, *.dll           # Eseguibile Windows precompilato e librerie SFML necessarie
-```
-
-### Note
-
-Progetto personale sviluppato nel 2021 con Dev-C++ su Windows; il repository include binari precompilati e DLL oltre al solo codice sorgente. Non è multipiattaforma out-of-the-box: su Linux/macOS è necessario ricompilare collegando SFML per il proprio sistema operativo.
 
 ### Licenza
 
@@ -59,27 +77,62 @@ MIT
 
 ## English
 
-The classic Snake game in C++, with graphics powered by SFML and a persistent file-based high score list.
+The classic Snake game in C++, with graphics powered by SFML and a persistent file-based high score list. Personal project developed in 2021.
 
-**Stack:** C++ · SFML (Graphics) · Windows / Dev-C++ (MinGW)
+**Stack:** C++ · SFML 2.x (Graphics/Window/System)
 
 ### Description
 
 C++ implementation of Snake using the SFML library for 2D graphics, on a 20×20 grid. It includes a start menu, the snake's movement logic, random food spawning, collision detection (with the walls and with the snake's own body), and a persistent leaderboard: scores are saved to a file and, at the end of each match, the top three are displayed in descending order.
 
+### Project structure
+
+```
+Snake-Cpp/
+├── src/
+│   └── main.cpp           # Game logic, rendering and event handling
+├── assets/
+│   ├── fonts/
+│   │   └── arial.ttf      # Font used for text rendering
+│   └── images/
+│       ├── snake.png      # Snake spritesheet
+│       ├── frutta.png     # Food sprite
+│       └── campo.png      # Field background
+├── data/
+│   └── punteggio.txt      # Persistent high score list (created/updated at runtime)
+├── dist/                  # Precompiled Windows executable, ready to run, + required DLLs
+│   ├── Snake.exe
+│   ├── *.dll
+│   ├── image/             # Copy of the assets in the layout expected by the precompiled binary
+│   └── file/
+├── Makefile
+├── LICENSE
+└── README.md
+```
+
 ### How to run
 
-The repository already includes a precompiled Windows executable (`Snake.exe`) with the required SFML DLLs, ready to run on Windows: just launch it from the project folder (resources are loaded via relative paths: `image/`, `file/`).
+**Precompiled Windows executable:** `dist/` contains a ready-to-run `Snake.exe`, together with the required DLLs and a copy of the needed assets. Just launch it directly from inside `dist/` (the binary expects the `image/` and `file/` subfolders next to it, matching how they were laid out when it was compiled).
 
-To rebuild from source:
-1. Install SFML 2.x (e.g. via vcpkg or your distribution's development package).
-2. Compile:
+**Rebuilding from source (recommended, cross-platform):**
+1. Install SFML 2.x, e.g.:
+   - Debian/Ubuntu: `sudo apt install libsfml-dev`
+   - Other systems: see [sfml-dev.org](https://www.sfml-dev.org/download.php) or use vcpkg
+2. From the **project root**:
    ```
-   g++ main.cpp -o Snake -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+   make
    ```
-3. Run it from the project folder, so the relative resource paths (`image/`, `file/`) resolve correctly.
+   This compiles `src/main.cpp` and produces the executable at `build/Snake`.
+3. Always run it **from the project root**, so the relative paths to `assets/` and `data/` resolve correctly:
+   ```
+   make run
+   ```
+   or equivalently:
+   ```
+   ./build/Snake
+   ```
 
-The included `Makefile.win` was generated by Dev-C++ and contains absolute paths specific to the original development machine (SFML 2.4.2): it's not directly reusable on another machine, but manual compilation with `g++` works fine.
+The old `Makefile.win` (generated by Dev-C++, with absolute paths from the original development machine) has been removed and replaced with a cross-platform `Makefile` based on `g++`, with no hardcoded paths.
 
 ### Key features
 
@@ -88,25 +141,8 @@ The included `Makefile.win` was generated by Dev-C++ and contains absolute paths
 - Random food spawning on a free cell, checked against the snake's body to avoid overlap
 - Collision detection with the field's walls or the snake's own body, ending the match
 - Incremental scoring (+100 for each food item eaten)
-- Persistent leaderboard: each match's score is saved to a file (`file/punteggio.txt`) and, at the end of the match, the three highest recorded scores are shown
+- Persistent leaderboard: each match's score is saved to a file (`data/punteggio.txt`) and, at the end of the match, the three highest recorded scores are shown
 - 2D graphical interface with sprites, textures and fonts rendered via SFML
-
-### Project structure
-
-```
-Snake-Cpp/
-├── main.cpp                 # Game logic, rendering and event handling
-├── Makefile.win              # Dev-C++ generated makefile (paths specific to the original machine)
-├── image/                    # Snake, food sprites and field background
-├── file/
-│   ├── arial.TTF              # Font used for text rendering
-│   └── punteggio.txt          # Persistent high score list
-└── Snake.exe, *.dll           # Precompiled Windows executable and required SFML libraries
-```
-
-### Notes
-
-Personal project developed in 2021 with Dev-C++ on Windows; the repository includes precompiled binaries and DLLs in addition to the source code. Not cross-platform out of the box: on Linux/macOS it needs to be rebuilt linking SFML for the target operating system.
 
 ### License
 

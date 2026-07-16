@@ -1,0 +1,7 @@
+# Build artifacts (generati localmente, non versionati)
+/build/
+*.o
+
+# File di sistema
+.DS_Store
+Thumbs.db
